@@ -1,0 +1,35 @@
+<!--
+  Generated template for the StockManageHoldingPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Manage stock holding</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-md-1 col-lg-2 col-xl-3></ion-col>
+      <ion-col col-12 col-md-10 col-lg-8 col-xl-6>
+        <ion-list>
+          <ion-item *ngFor="let holding of holdings" style="padding-left: 0px;">
+            <h3>{{holding.code}} - {{holding.side}} - {{holding.quantity | number:'1.0'}}<span float-right>${{holding.gross | number:'1.2-2'}}</span></h3>
+            <p>HSCEI: {{holding.hsce | number:'4.2-2'}} <span float-right>{{holding.date | date: 'yyyy-MM-dd' }}</span></p>
+            <button ion-button icon-only clear item-end (click)="confirmDelete(holding)"><ion-icon name="trash"></ion-icon></button>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col col-md-1 col-lg-2 col-xl-3></ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

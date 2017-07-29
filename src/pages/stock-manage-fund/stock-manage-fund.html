@@ -1,0 +1,74 @@
+<!--
+  Generated template for the StockManageFundPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Manage Fund Rest API</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-md-1 col-lg-2 col-xl-3 style="height: 1px;"></ion-col>
+      <ion-col col-12 col-md-10 col-lg-8 col-xl-6 style="font-size: small;">
+
+        <p>Existing Fund Names: </p>
+        <ion-grid>
+          <ion-row>
+            <ion-col col *ngFor="let fund of funds">
+              <button ion-button small outline (click)="onSelectString(fund.name + '/')" >{{fund.name}}</button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <p>URL:</p>
+        <ion-list no-lines>
+          <ion-item>
+              <button ion-button small outline (click)="onSelectString('create/')" class="btn">create</button><span style="vertical-align: middle">/[fundName]</span>
+          </ion-item>
+          <ion-item>
+              <button ion-button small outline (click)="onSelectString('delete/')" class="btn">delete</button><span style="vertical-align: middle">/[fundName]</span>
+          </ion-item>
+          <ion-item>
+            <span style="vertical-align: middle">[fundName]/[</span><button ion-button small outline (click)="onSelectString('buy/')" class="btn">buy</button><span style="vertical-align: middle">,</span><button ion-button small outline (click)="onSelectString('sell/')" class="btn">sell</button><span style="vertical-align: middle">]/[code]/[qty]/[price]</span>
+          </ion-item>
+          <ion-item><span style="vertical-align: middle">[fundName]/</span><button ion-button small outline (click)="onSelectString('remove/')" class="btn">remove</button><span style="vertical-align: middle">/[code]</span></ion-item>
+          <ion-item><span style="vertical-align: middle">[fundName]/</span><button ion-button small outline (click)="onSelectString('payinterest/')" class="btn">payinterest</button><span style="vertical-align: middle">/[code]/[amount]</span></ion-item>
+          <ion-item><span style="vertical-align: middle">[fundName]/</span><button ion-button small outline (click)="onSelectString('set/profit/')" class="btn">set/profit</button><span style="vertical-align: middle">/[amount]</span></ion-item>
+          <ion-item><span style="vertical-align: middle">[fundName]/[</span><button ion-button small outline (click)="onSelectString('add/')" class="btn">add</button>,<button ion-button small outline (click)="onSelectString('subtract/')" class="btn">subtract</button>]/<button ion-button small outline (click)="onSelectString('profit/')" class="btn">profit</button>/[amounts(comma separated)]</ion-item>
+          <ion-item>
+            <ion-icon name="link" item-start></ion-icon><ion-label floating>url</ion-label><ion-input #requestInput [(ngModel)]="requestUrl"></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-grid>
+          <ion-row>
+            <ion-col col><button ion-button clear (click)="onSubmit()" ><ion-icon name="send"></ion-icon>&nbsp; Submit</button></ion-col>
+            <ion-col col><button ion-button clear (click)="onClear()" ><ion-icon name="close"></ion-icon>&nbsp; Clear</button></ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <p>{{result}}</p>
+
+        <ion-list *ngIf="requestHistory.length > 0">
+          <ion-list-header>History</ion-list-header>
+          <ion-item *ngFor="let h of requestHistory" style="font-size: smaller; min-height: 2.2rem;">
+            <ion-label style="margin: 4px 4px 4px 0;">{{h}}</ion-label>
+          </ion-item>
+        </ion-list>
+
+      </ion-col>
+      <ion-col col-md-1 col-lg-2 col-xl-3 style="height: 1px;"></ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

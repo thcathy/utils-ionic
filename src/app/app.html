@@ -2,15 +2,35 @@
 
   <ion-header>
     <ion-toolbar>
-      <ion-title>Pages</ion-title>
+      <ion-buttons start>
+        <button ion-button menuClose><ion-icon large name="close" style="font-size: x-large;"></ion-icon></button>
+      </ion-buttons>
+      <ion-title>THC Utils</ion-title>
     </ion-toolbar>
+
   </ion-header>
 
   <ion-content>
     <ion-list>
-      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
+      <ion-item>
+        <button ion-item *ngIf="!authService.isAuthenticated()" (click)="authService.login()"><ion-icon name="log-in"></ion-icon> Login</button>
+        <button ion-item *ngIf="authService.isAuthenticated()" (click)="authService.logout(); menu.close();"><ion-icon name="log-out"></ion-icon> Logout</button>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header>Forum</ion-list-header>
+      <ion-item><button ion-item *ngFor="let p of forumPages" (click)="openPage(p)">{{p.title}}</button></ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header>Quote</ion-list-header>
+      <button ion-item *ngFor="let p of quotesPages" (click)="openPage(p)">{{p.title}}</button>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header>Stock Management</ion-list-header>
+      <button ion-item *ngFor="let p of stockMgmtPages" (click)="openPage(p)">{{p.title}}</button>
     </ion-list>
   </ion-content>
 

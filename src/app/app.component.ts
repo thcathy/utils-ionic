@@ -2,12 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 
 import { Platform, MenuController, Nav } from 'ionic-angular';
 
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ListPage } from '../pages/list/list';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import {HelloIonicPage} from "../pages/hello-ionic/hello-ionic";
+import {AuthService} from "./service/auth.service";
 
 @Component({
   templateUrl: 'app.html'
@@ -16,22 +14,39 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   // make HelloIonicPage the root (or first) page
-  rootPage = HelloIonicPage;
-  pages: Array<{title: string, component: any}>;
+  //rootPage = HelloIonicPage;
+  rootPage = HelloIonicPage
+  forumPages: Array<{title: string, index?: number, url: string}>;
+  stockMgmtPages: Array<{title: string, url: string}>;
+  quotesPages: Array<{title: string, url: string}>;
 
   constructor(
     public platform: Platform,
     public menu: MenuController,
     public statusBar: StatusBar,
-    public splashScreen: SplashScreen
+    public splashScreen: SplashScreen,
+    public authService: AuthService,
   ) {
     this.initializeApp();
+    authService.handleAuthentication();
 
     // set our app's pages
-    this.pages = [
-      { title: 'Hello Ionic', component: HelloIonicPage },
-      { title: 'My First List', component: ListPage }
+    this.forumPages = [
+      { title: 'Wish List', url: 'forum-tab', index: 0},
+      { title: 'Music', url: 'forum-tab', index: 1},
+      { title: 'Movie', url: 'forum-tab', index: 2},
     ];
+
+    this.quotesPages = [
+      { title: 'Full Quote', url: 'stock-full-quote' },
+    ]
+
+    this.stockMgmtPages = [
+      { title: 'Create Holding', url: 'stock-create-holding'},
+      { title: 'Manage Holding', url: 'stock-manage-holding'},
+      { title: 'Manage Fund', url: 'stock-manage-fund'},
+    ];
+
   }
 
   initializeApp() {
@@ -45,8 +60,21 @@ export class MyApp {
 
   openPage(page) {
     // close the menu when clicking a link from the menu
-    this.menu.close();
+    this.menu.close().catch(() => {
+      console.log("cannot close menu");
+    });
     // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
+    if (page.index) {
+      this.nav.setRoot(page.url, {
+        'tabIndex': page.index
+      }).catch(() => {
+        console.log("Didn't set nav root");
+      });
+
+    } else {
+      this.nav.setRoot(page.url).catch(() => {
+        console.log("Didn't set nav root");
+      });
+    }
   }
 }
