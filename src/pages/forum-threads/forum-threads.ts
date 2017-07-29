@@ -28,7 +28,8 @@ export class ForumThreadsPage {
               private forumService: ForumService) {
     this.threads = this.DEFAULT_THREAD;
     let loading = this.loadingCtrl.create({
-      content: 'Please wait...'
+      content: 'Please wait...',
+      duration: 3000
     });
     loading.present();
     console.log('Passed params', navParams.data);
