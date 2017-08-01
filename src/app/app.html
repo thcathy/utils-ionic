@@ -18,20 +18,20 @@
       </ion-item>
     </ion-list>
 
-    <ion-list>
-      <ion-list-header>Forum</ion-list-header>
+    <ion-item-group>
+      <ion-item-divider color="light">Forum</ion-item-divider>
       <ion-item><button ion-item *ngFor="let p of forumPages" (click)="openPage(p)">{{p.title}}</button></ion-item>
-    </ion-list>
+    </ion-item-group>
 
-    <ion-list>
-      <ion-list-header>Quote</ion-list-header>
-      <button ion-item *ngFor="let p of quotesPages" (click)="openPage(p)">{{p.title}}</button>
-    </ion-list>
+    <ion-item-group>
+      <ion-item-divider color="light">Quote</ion-item-divider>
+      <ion-item><button ion-item *ngFor="let p of quotesPages" (click)="openPage(p)">{{p.title}}</button></ion-item>
+    </ion-item-group>
 
-    <ion-list>
-      <ion-list-header>Stock Management</ion-list-header>
-      <button ion-item *ngFor="let p of stockMgmtPages" (click)="openPage(p)">{{p.title}}</button>
-    </ion-list>
+    <ion-item-group>
+      <ion-item-divider color="light">Stock Management</ion-item-divider>
+      <ion-item><button ion-item *ngFor="let p of stockMgmtPages" (click)="openPage(p)">{{p.title}}</button></ion-item>
+    </ion-item-group>
   </ion-content>
 
 </ion-menu>
