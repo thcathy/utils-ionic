@@ -23,6 +23,7 @@ export class FundService {
   }
 
   submitRequest(request: string): Promise<string> {
+    if (request.slice(-1) != '/') request += '/';
     console.log(`calling fund request url ${request}`);
     return this.http.get(ENV.apiHost + '/rest/fund/' + request)
             .toPromise()
