@@ -10,7 +10,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: install ionic
-          command: npm install -g ionic cordova
+          command: sudo npm install -g ionic cordova
       - run:
           name: install-npm-wee
           command: npm install
