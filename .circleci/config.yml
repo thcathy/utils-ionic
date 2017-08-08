@@ -9,6 +9,9 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
+          name: install ionic
+          command: npm install -g ionic cordova
+      - run:
           name: install-npm-wee
           command: npm install
       - save_cache:
