@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:4.8.2
+      - image: circleci/node:latest
     steps:
       - checkout
       - restore_cache:
@@ -16,14 +16,8 @@ jobs:
           paths:
             - ./node_modules
       - run:
-          name: test
-          command: npm test
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - run:
           name: ionic build
           command: ionic cordova build browser --prod
       - run:
           name: firebase deploy
-          command: firebase deploy
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --non-interactive
