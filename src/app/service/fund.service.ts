@@ -1,29 +1,22 @@
 import { Injectable }              from '@angular/core';
-import { Http, Headers }          from '@angular/http';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import {Fund} from "../entity/fund";
-
-declare const ENV;
+import {ENV} from "@app/env";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class FundService {
   private ALL_FUND_URL = ENV.apiHost + '/rest/fund/getall';
 
-  constructor (private http: Http) {}
+  constructor (private http: HttpClient) {}
 
-  getFunds(): Promise<Fund[]> {
-    let headers = new Headers();
-    if (localStorage.getItem('id_token')) {
-      headers.append('Authorization', 'Bearer  ' + localStorage.getItem('id_token'));
-    }
-    return this.http.get(this.ALL_FUND_URL, {headers: headers})
-      .toPromise()
-      .then(response => response.json() as Fund[])
-      .catch(this.handleError);
+  getFunds(): Observable<Fund[]> {
+    return this.http.get<Fund[]>(this.ALL_FUND_URL);
   }
 
   submitRequest(request: string): Promise<string> {
@@ -33,7 +26,7 @@ export class FundService {
             .toPromise()
             .then(response => {
               try {
-                return JSON.stringify(response.json());
+                return JSON.stringify(response);
               } catch (e) {
                 return response.toString();
               }

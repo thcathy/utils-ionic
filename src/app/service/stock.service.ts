@@ -8,8 +8,7 @@ import 'rxjs/add/operator/toPromise';
 import {StockHolding} from "../entity/stock-holding";
 import {StockQuote} from "../entity/stock-quote";
 import {MarketDailyReport} from "../entity/market-daily-report";
-
-declare const ENV;
+import {ENV} from "@app/env";
 
 @Injectable()
 export class StockService {

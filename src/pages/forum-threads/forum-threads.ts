@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {IonicPage, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {ForumThread} from "../../app/entity/forum-thread";
 import {ForumService} from "../../app/service/forum.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {AppService} from "../../app/service/app.service";
 
 /**
  * Generated class for the ForumThreadsPage page.
@@ -25,7 +27,8 @@ export class ForumThreadsPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public loadingCtrl: LoadingController,
-              private forumService: ForumService) {
+              private forumService: ForumService,
+              public appService: AppService) {
     this.threads = this.DEFAULT_THREAD;
     let loading = this.loadingCtrl.create({
       content: 'Please wait...',
@@ -35,10 +38,13 @@ export class ForumThreadsPage {
     console.log('Passed params', navParams.data);
     this.type = navParams.data['type'];
     this.forumService.getForumThreads(this.type, navParams.data['page'])
-      .then(threads => {
-        this.threads = threads;
-        loading.dismiss();
-      })
+      .subscribe(
+        data => {
+          this.threads = data;
+          loading.dismiss();
+          },
+        err => this.appService.handleError(err)
+      )
   }
 
   onSelectThread(thread: ForumThread): void {

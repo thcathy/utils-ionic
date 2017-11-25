@@ -24,6 +24,9 @@ import {StockManageFundPageModule} from "../pages/stock-manage-fund/stock-manage
 import {StockManageHoldingPageModule} from "../pages/stock-manage-holding/stock-manage-holding.module";
 import {AuthService} from "./service/auth.service";
 import {AuthCordovaService} from "./service/auth-cordova.service";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {IdTokenInterceptor} from "./interceptor/IdTokenInterceptor";
+import {AppService} from "./service/app.service";
 
 @NgModule({
   declarations: [
@@ -37,6 +40,7 @@ import {AuthCordovaService} from "./service/auth-cordova.service";
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     ForumTabPageModule,
     ForumThreadsPageModule,
@@ -63,7 +67,13 @@ import {AuthCordovaService} from "./service/auth-cordova.service";
     FundService,
     AuthService,
     AuthCordovaService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    AppService,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: IdTokenInterceptor,
+      multi: true
+    },
   ]
 })
 export class AppModule {}

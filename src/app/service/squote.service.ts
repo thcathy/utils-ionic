@@ -5,8 +5,8 @@ import 'rxjs/Rx';
 
 import {HoldingStock} from '../entity/holding-stock';
 import {Fund} from '../entity/fund';
+import {ENV} from "@app/env";
 
-declare const ENV;
 
 @Injectable()
 export class SquoteService {
