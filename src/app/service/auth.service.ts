@@ -3,6 +3,7 @@ import 'rxjs/add/operator/filter';
 import * as auth0 from 'auth0-js';
 import {App, NavController} from "ionic-angular";
 import {HelloIonicPage} from "../../pages/hello-ionic/hello-ionic";
+import {Http} from "@angular/http";
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
     scope: 'openid profile'
   });
 
-  constructor(protected app: App) {
+  constructor(protected app: App, private http: Http) {
   }
 
   getNavCtrl(): NavController {

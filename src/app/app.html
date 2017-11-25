@@ -13,8 +13,11 @@
   <ion-content>
     <ion-list>
       <ion-item>
-        <button ion-item *ngIf="!authService.isAuthenticated()" (click)="authService.login()"><ion-icon name="log-in"></ion-icon> Login</button>
-        <button ion-item *ngIf="authService.isAuthenticated()" (click)="authService.logout(); menu.close();"><ion-icon name="log-out"></ion-icon> Logout</button>
+        <button ion-item *ngIf="!authService.isAuthenticated() && !isApp()" (click)="authService.login()"><ion-icon name="log-in"></ion-icon> Login</button>
+        <button ion-item *ngIf="authService.isAuthenticated() && !isApp()" (click)="authService.logout(); menu.close();"><ion-icon name="log-out"></ion-icon> Logout</button>
+
+        <button ion-item *ngIf="!authCordovaService.isAuthenticated() && isApp()" (click)="authCordovaService.login()"><ion-icon name="log-in"></ion-icon> Login (app)</button>
+        <button ion-item *ngIf="authCordovaService.isAuthenticated() && isApp()" (click)="authCordovaService.logout(); menu.close();"><ion-icon name="log-out"></ion-icon> Logout (app)</button>
       </ion-item>
     </ion-list>
 

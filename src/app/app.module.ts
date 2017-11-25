@@ -23,6 +23,7 @@ import {StockFullQuotePageModule} from "../pages/stock-full-quote/stock-full-quo
 import {StockManageFundPageModule} from "../pages/stock-manage-fund/stock-manage-fund.module";
 import {StockManageHoldingPageModule} from "../pages/stock-manage-holding/stock-manage-holding.module";
 import {AuthService} from "./service/auth.service";
+import {AuthCordovaService} from "./service/auth-cordova.service";
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import {AuthService} from "./service/auth.service";
     SquoteService,
     FundService,
     AuthService,
+    AuthCordovaService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
