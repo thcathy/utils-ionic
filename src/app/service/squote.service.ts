@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {Observable}     from 'rxjs/Observable';
-import 'rxjs/Rx';
 
 import {HoldingStock} from '../entity/holding-stock';
 import {Fund} from '../entity/fund';
 import {ENV} from "@app/env";
+
+import 'rxjs/add/operator/mergeMap';
 
 
 @Injectable()

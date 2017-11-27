@@ -12,7 +12,8 @@ const auth0Config = {
   clientId: 'mBv3zeOBD6Wl2NI2zMzeJFO8kZU7XyJl',
   domain: 'thcathy.auth0.com',
   callbackURL: location.href,
-  packageIdentifier: 'com.thc.utils'
+  packageIdentifier: 'com.thc.utils',
+  scope: 'openid profile'
 };
 
 @Injectable()
