@@ -86,9 +86,7 @@ export class MyApp {
       });
 
     } else {
-      this.nav.setRoot(page.url).catch(() => {
-        console.log("Didn't set nav root");
-      });
+      this.nav.setRoot(page.url);
     }
   }
 }
