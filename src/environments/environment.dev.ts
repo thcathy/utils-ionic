@@ -1,4 +1,4 @@
 export const ENV = {
-  mode: 'Production',
-  apiHost: 'http://localhost:8090'
+  mode: 'Development',
+  apiHost: 'http://192.168.0.160:8090'
 }
