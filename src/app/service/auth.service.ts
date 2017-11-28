@@ -1,15 +1,32 @@
-import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/filter';
-import * as auth0 from 'auth0-js';
+import {Injectable, NgZone} from '@angular/core';
 import {App, NavController} from "ionic-angular";
 import {HelloIonicPage} from "../../pages/hello-ionic/hello-ionic";
-import {Http} from "@angular/http";
+import Auth0Cordova from '@auth0/cordova';
+import Auth0 from 'auth0-js';
+import {AppService} from "./app.service";
+
+const auth0CordovaConfig = {
+  // needed for auth0
+  clientID: 'mBv3zeOBD6Wl2NI2zMzeJFO8kZU7XyJl',
+
+  // needed for auth0cordova
+  clientId: 'mBv3zeOBD6Wl2NI2zMzeJFO8kZU7XyJl',
+  domain: 'thcathy.auth0.com',
+  callbackURL: location.href,
+  packageIdentifier: 'com.thc.utils',
+  scope: 'openid profile'
+};
 
 @Injectable()
 export class AuthService {
   userProfile: any;
+  idTokenKey = 'id_token';
+  expiresAtKey = 'expires_at';
+  accessTokenKey = 'access_token';
+  accessToken: string;
+  idToken: string;
 
-  auth0 = new auth0.WebAuth({
+  auth0 = new Auth0.WebAuth({
     clientID: 'mBv3zeOBD6Wl2NI2zMzeJFO8kZU7XyJl',
     domain: 'thcathy.auth0.com',
     responseType: 'token id_token',
@@ -18,7 +35,18 @@ export class AuthService {
     scope: 'openid profile'
   });
 
-  constructor(protected app: App, private http: Http) {
+  auth0Cordova = new Auth0.WebAuth(auth0CordovaConfig);
+
+
+  constructor(protected app: App,
+              public zone: NgZone,
+              protected appService: AppService) {
+    try {
+      this.userProfile = localStorage.getItem('profile');
+      this.idToken = localStorage.getItem(this.idTokenKey);
+    } catch (e) {
+      localStorage.setItem(this.idTokenKey, null);
+    }
   }
 
   getNavCtrl(): NavController {
@@ -26,7 +54,10 @@ export class AuthService {
   }
 
   public login(): void {
-    this.auth0.authorize();
+    if (this.appService.isApp())
+      this.loginCordova();
+    else
+      this.auth0.authorize();
   }
 
   public handleAuthentication(): void {
@@ -47,13 +78,38 @@ export class AuthService {
     });
   }
 
+  public loginCordova() {
+    const client = new Auth0Cordova(auth0CordovaConfig);
+    const options = { scope: 'openid profile offline_access' };
+
+    client.authorize(options, (err, authResult) => {
+      if(err) {
+        throw err;
+      }
+      this.setSession(authResult);
+      this.auth0Cordova.client.userInfo(this.accessToken, (err, profile) => {
+        if(err) {
+          throw err;
+        }
+
+        profile.user_metadata = profile.user_metadata || {};
+        localStorage.setItem('profile', profile);
+        this.zone.run(() => {
+          this.userProfile = profile;
+        });
+      });
+    });
+  }
+
   private setSession(authResult): void {
     console.log('login session: update session');
     // Set the time that the access token will expire at
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
+    console.info(`expiresAt: ${expiresAt}`);
+
+    localStorage.setItem(this.accessTokenKey, authResult.accessToken);
+    localStorage.setItem(this.idTokenKey, authResult.idToken);
+    localStorage.setItem(this.expiresAtKey, expiresAt);
   }
 
   public logout(): void {
@@ -70,7 +126,7 @@ export class AuthService {
     // Check whether the current time is past the
     // access token's expiry time
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return new Date().getTime() < expiresAt;
+    return Date.now() < expiresAt;
   }
 
   public getProfile(cb): void {

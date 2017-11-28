@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/filter';
 import { Platform, App } from 'ionic-angular';
-import {AuthService} from "./auth.service";
-import {AuthCordovaService} from "./auth-cordova.service";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Injectable()
 export class AppService {
 
-  constructor(public app: App,
-              public platform: Platform,
-              public authService: AuthService,
-              public authCordovaService: AuthCordovaService
+  constructor(public platform: Platform
   ) { }
 
   isApp(): boolean {
@@ -30,11 +24,6 @@ export class AppService {
       debugger;
       if (err.status == 401 || err.status == 403) {
         alert(`No permission to open. Please login`);
-        if (this.isApp()) {
-          this.authCordovaService.login();
-        } else {
-          this.authService.login();
-        }
       }
     }
   }
