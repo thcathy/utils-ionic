@@ -2,6 +2,7 @@ import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {HoldingStock} from "../../app/entity/holding-stock";
 import {Fund} from "../../app/entity/fund";
 import {SquoteService} from "../../app/service/squote.service";
+import {FundService} from "../../app/service/fund.service";
 
 /**
  * Generated class for the SelectFundComponent component.
@@ -20,16 +21,17 @@ export class SelectFundComponent implements OnChanges {
   updatedFund: Fund;
 
   constructor(
-    private squoteService: SquoteService
+    private squoteService: SquoteService,
+    public fundService: FundService
   ) {
     console.log('Hello SelectFundComponent Component');
   }
 
   ngOnChanges(changes: {[propName: string]: SimpleChange}) {
     this.funds = [];
-    this.squoteService.getAllFund()
+    this.fundService.getFunds()
       .subscribe(
-        fund => this.funds.push(fund),
+        funds => this.funds = funds,
         error =>  this.errorMessage = <any>error
       );
   }

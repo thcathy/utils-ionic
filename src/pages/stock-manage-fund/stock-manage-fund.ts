@@ -4,6 +4,7 @@ import {Fund} from "../../app/entity/fund";
 import {FundService} from "../../app/service/fund.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {AppService} from "../../app/service/app.service";
+import {AuthService} from "../../app/service/auth.service";
 
 /**
  * Generated class for the StockManageFundPage page.
@@ -27,8 +28,9 @@ export class StockManageFundPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private fundService: FundService,
-              private appService: AppService) {
+              public fundService: FundService,
+              public appService: AppService,
+              public authService: AuthService) {
   }
 
   onClear() {
@@ -55,6 +57,9 @@ export class StockManageFundPage {
   }
 
   ionViewWillEnter() {
+    if (!this.authService.requireAuthenticated())
+      return;
+
     this.requestUrl = '';
     this.fundService.getFunds().subscribe(
       funds => this.funds = funds,

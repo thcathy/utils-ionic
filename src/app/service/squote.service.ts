@@ -6,30 +6,23 @@ import {HoldingStock} from '../entity/holding-stock';
 import {Fund} from '../entity/fund';
 import {ENV} from "@app/env";
 
-import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/do';
+import {HttpClient} from "@angular/common/http";
 
 
 @Injectable()
 export class SquoteService {
-    constructor (private http: Http) {
+    constructor (private http: HttpClient) {
     }
 
     private createHoldingStockUrl = ENV.apiHost + '/rest/createholding/create/?';  // URL to web api
-    private allFundUrl = ENV.apiHost + '/rest/fund/getall';
     private updateFundByHoldingUrl = ENV.apiHost + '/rest/createholding/updatefund/?';
 
     createHoldingStock(message: string, hscei: string) {
         let queryString = 'message=' + encodeURIComponent(message) + '&hscei=' + hscei;
         return this.http.get(this.createHoldingStockUrl + queryString)
-            .do(resp => console.info('createHoldingStock response: ' + resp.text()))
-            .map(res => <HoldingStock> res.json())
-            .catch(this.handleError);
-    }
-
-    getAllFund() {
-        return this.http.get(this.allFundUrl)
-            .mergeMap(res => res.json())
-            .map(r => <Fund> r)
+            .do(resp => console.info('createHoldingStock response: ' + resp))
+            .map(res => <HoldingStock> res)
             .catch(this.handleError);
     }
 
@@ -37,13 +30,13 @@ export class SquoteService {
         let queryString = 'fundName=' + fundName + '&holdingId=' + encodeURIComponent(holdingId);
         console.log(queryString);
         return this.http.get(this.updateFundByHoldingUrl + queryString)
-            .do(resp => console.info('updateFundByHolding response: ' + resp.text()))
-            .map(res => <Fund> res.json())
+            .do(resp => console.info('updateFundByHolding response: ' + resp))
+            .map(res => <Fund> res)
             .catch(this.handleError);
     }
 
     private handleError (error: any) {
-        console.error(error);
+        console.error(error.message);
         return Observable.throw(error._body);
     }
 }

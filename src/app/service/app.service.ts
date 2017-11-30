@@ -21,7 +21,7 @@ export class AppService {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
       console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-      debugger;
+
       if (err.status == 401 || err.status == 403) {
         alert(`No permission to open. Please login`);
       }

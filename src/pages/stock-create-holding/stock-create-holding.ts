@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {HoldingStock} from "../../app/entity/holding-stock";
 import {SquoteService} from "../../app/service/squote.service";
+import {AuthService} from "../../app/service/auth.service";
 
 /**
  * Generated class for the StockCreateHoldingPage page.
@@ -24,9 +25,15 @@ export class StockCreateHoldingPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private squoteService: SquoteService) {
+              public squoteService: SquoteService,
+              public authService: AuthService) {
     this.message = '';
     this.hscei = '';
+  }
+
+  ionViewWillEnter() {
+    if (!this.authService.requireAuthenticated())
+      return;
   }
 
   onSubmit() {

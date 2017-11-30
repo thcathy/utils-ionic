@@ -89,6 +89,7 @@ export class AuthService {
       this.setSession(authResult);
       this.auth0Cordova.client.userInfo(this.accessToken, (err, profile) => {
         if(err) {
+          this.getNavCtrl().setRoot(HelloIonicPage);
           throw err;
         }
 
@@ -97,6 +98,7 @@ export class AuthService {
         this.zone.run(() => {
           this.userProfile = profile;
         });
+        this.getNavCtrl().setRoot(HelloIonicPage);
       });
     });
   }
@@ -145,4 +147,13 @@ export class AuthService {
     });
   }
 
+  public requireAuthenticated(): boolean {
+    if (!this.isAuthenticated()) {
+      console.log(`require login, redirect to login page`);
+      alert(`Please login!`);
+      this.login();
+      return false;
+    }
+    return true;
+  }
 }

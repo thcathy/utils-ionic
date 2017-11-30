@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams} from 'ionic-angular';
 import {StockService} from "../../app/service/stock.service";
 import {StockHolding} from "../../app/entity/stock-holding";
+import {AuthService} from "../../app/service/auth.service";
 
 /**
  * Generated class for the StockManageHoldingPage page.
@@ -22,7 +23,8 @@ export class StockManageHoldingPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
-              private stockService: StockService) {
+              public stockService: StockService,
+              public authService: AuthService) {
 
   }
 
@@ -56,6 +58,9 @@ export class StockManageHoldingPage {
   }
 
   ionViewWillEnter() {
+    if (!this.authService.requireAuthenticated())
+      return;
+
     this.stockService.getStockHoldings()
       .then(holdings => this.holdings = holdings);
   }
