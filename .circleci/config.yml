@@ -2,18 +2,20 @@ version: 2
 jobs:
   build:
     working_directory: ~/repo
-    docker:
-      - image: beevelop/ionic
+    machine: true
     steps:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
+          name: install ionic
+          command: npm install ionic cordova
+      - run:
           name: install-npm-wee
           command: npm install
       - run:
           name: ionic build
-          command: ionic cordova build browser --prod
+          command: ./node_modules/.bin/ionic cordova build browser --prod
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
