@@ -3,14 +3,11 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:latest
+      - image: beevelop/ionic
     steps:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: install ionicnpm
-          command:  npm install -g ionic cordova
       - run:
           name: install-npm-wee
           command: npm install
