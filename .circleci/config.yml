@@ -18,9 +18,9 @@ jobs:
           name: ionic build
           command: ./node_modules/.bin/ionic cordova build browser --prod
       - save_cache:
-                key: dependency-cache-{{ checksum "package.json" }}
-                paths:
-                  - ./node_modules
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
       - run:
           name: firebase deploy
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --non-interactive
