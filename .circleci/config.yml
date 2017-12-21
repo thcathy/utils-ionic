@@ -2,9 +2,8 @@ version: 2
 jobs:
   build:
     working_directory: ~/repo
-    machine:
-      node:
-        version: 8.2.0
+    docker:
+      - image: circleci/node:latest
     steps:
       - checkout
       - restore_cache:
