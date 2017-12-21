@@ -2,7 +2,9 @@ version: 2
 jobs:
   build:
     working_directory: ~/repo
-    machine: true
+    machine:
+      node:
+        version: 8.2.0
     steps:
       - checkout
       - restore_cache:
