@@ -8,8 +8,8 @@ import 'rxjs/add/operator/toPromise';
 import {StockHolding} from "../entity/stock-holding";
 import {StockQuote} from "../entity/stock-quote";
 import {MarketDailyReport} from "../entity/market-daily-report";
-
-declare const ENV;
+import {ENV} from "@app/env";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class StockService {
@@ -22,33 +22,33 @@ export class StockService {
   private SAVE_QUERY_URL = ENV.apiHost + '/rest/stock/save/query';
   private LOAD_QUERY_URL = ENV.apiHost + '/rest/stock/load/query';
 
-  constructor (private http: Http) {}
+  constructor (private http: HttpClient) {}
 
   getStockHoldings(): Promise<StockHolding[]> {
     return this.http.get(this.LIST_HOLDING_URL)
       .toPromise()
-      .then(response => response.json() as StockHolding[])
+      .then(response => response as StockHolding[])
       .catch(this.handleError);
   }
 
   deleteStockHolding(id: string): Promise<StockHolding[]> {
     return this.http.get(this.DELETE_HOLDING_URL + id)
       .toPromise()
-      .then(response => response.json() as StockHolding[])
+      .then(response => response as StockHolding[])
       .catch(this.handleError);
   }
 
   getStockPerformanceQuotes(): Promise<StockQuote[]> {
     return this.http.get(this.STOCK_PERFORMANCE_URL)
       .toPromise()
-      .then(response => response.json() as StockQuote[])
+      .then(response => response as StockQuote[])
       .catch(this.handleError);
   }
 
   getMarketDailyReport(): Promise<Map<string, MarketDailyReport>> {
     return this.http.get(this.MARKET_DAILY_REPORT_URL)
       .toPromise()
-      .then(response => response.json() as Map<string, MarketDailyReport>)
+      .then(response => response as Map<string, MarketDailyReport>)
       .catch(this.handleError);
   }
 
@@ -57,30 +57,30 @@ export class StockService {
 
     return this.http.get(this.FULL_QUOTE_URL + '?codes=' + codes)
       .toPromise()
-      .then(response => response.json() as Map<string, object>)
+      .then(response => response as Map<string, object>)
       .catch(this.handleError);
   }
 
   getIndexQuotes(): Promise<StockQuote[]> {
     return this.http.get(this.INDEX_QUOTE_URL)
       .toPromise()
-      .then(response => response.json() as StockQuote[])
+      .then(response => response as StockQuote[])
       .catch(this.handleError);
   }
 
   saveQuery(codes: string): Promise<string> {
     if (codes == null) codes = '';
 
-    return this.http.get(this.SAVE_QUERY_URL + '?codes=' + codes)
+    return this.http.get(this.SAVE_QUERY_URL + '?codes=' + codes, {responseType: 'text'})
       .toPromise()
-      .then(response => response.text())
+      .then(response => response)
       .catch(this.handleError);
   }
 
   loadQuery(): Promise<string> {
-    return this.http.get(this.LOAD_QUERY_URL)
+    return this.http.get(this.LOAD_QUERY_URL, {responseType: 'text'})
       .toPromise()
-      .then(response => response.text())
+      .then(response => response)
       .catch(this.handleError);
   }
 

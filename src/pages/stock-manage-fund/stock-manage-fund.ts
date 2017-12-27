@@ -2,6 +2,9 @@ import {Component, ViewChild} from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {Fund} from "../../app/entity/fund";
 import {FundService} from "../../app/service/fund.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {AppService} from "../../app/service/app.service";
+import {AuthService} from "../../app/service/auth.service";
 
 /**
  * Generated class for the StockManageFundPage page.
@@ -25,7 +28,9 @@ export class StockManageFundPage {
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
-              private fundService: FundService) {
+              public fundService: FundService,
+              public appService: AppService,
+              public authService: AuthService) {
   }
 
   onClear() {
@@ -39,7 +44,10 @@ export class StockManageFundPage {
         this.result = result;
         this.requestHistory.unshift(this.requestUrl);
         this.requestUrl = '';
-        this.fundService.getFunds().then(funds => this.funds = funds);
+        this.fundService.getFunds().subscribe(
+          funds => this.funds = funds,
+          err => this.appService.handleError(err)
+        );
       });
   }
 
@@ -49,8 +57,15 @@ export class StockManageFundPage {
   }
 
   ionViewWillEnter() {
+    if (!this.authService.requireAuthenticated())
+      return;
+
     this.requestUrl = '';
-    this.fundService.getFunds().then(funds => this.funds = funds);
+    this.fundService.getFunds().subscribe(
+      funds => this.funds = funds,
+      err => this.appService.handleError(err)
+
+    );
   }
 
   ionViewDidLoad() {

@@ -1,5 +1,4 @@
 import { Injectable }              from '@angular/core';
-import { Http, Response }          from '@angular/http';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -8,7 +7,9 @@ import 'rxjs/add/operator/toPromise';
 import { ForumThread } from '../entity/forum-thread';
 import {ForumWishItem} from "../entity/forum-wishlist";
 
-declare const ENV;
+import { ENV } from '@app/env';
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class ForumService {
@@ -18,17 +19,14 @@ export class ForumService {
   private ADD_WISHLIST_URL = ENV.apiHost + '/rest/forum/wishlist/add/';
   private DELETE_WISHLIST_URL = ENV.apiHost + '/rest/forum/wishlist/delete/';
 
-  constructor (private http: Http) {}
+  constructor (private http: HttpClient) {}
 
-  getForumThreads(type: String, page: number): Promise<ForumThread[]> {
-    return this.http.get(this.LIST_URL + type + "/" + page)
-      .toPromise()
-      .then(response => response.json() as ForumThread[])
-      .catch(this.handleError);
+  getForumThreads(type: String, page: number): Observable<ForumThread[]> {
+    return this.http.get<ForumThread[]>(this.LIST_URL + type + "/" + page);
   }
 
   visitedUrl(url: string): Promise<string> {
-    return this.http.post(this.VISITED_URL, url)
+    return this.http.post(this.VISITED_URL, url,{responseType: 'text'})
       .toPromise()
       .then(response => 'success')
       .catch(this.handleError);
@@ -37,21 +35,21 @@ export class ForumService {
   getWishList(): Promise<ForumWishItem[]> {
     return this.http.get(this.WISHLIST_URL)
       .toPromise()
-      .then(response => response.json() as ForumWishItem[])
+      .then(response => response as ForumWishItem[])
       .catch(this.handleError);
   }
 
   addWishList(text: string): Promise<ForumWishItem> {
     return this.http.get(this.ADD_WISHLIST_URL + text)
       .toPromise()
-      .then(response => response.json() as ForumWishItem)
+      .then(response => response as ForumWishItem)
       .catch(this.handleError);
   }
 
   deleteWishList(text: string): Promise<ForumWishItem[]> {
     return this.http.get(this.DELETE_WISHLIST_URL + text)
       .toPromise()
-      .then(response => response.json() as ForumWishItem[])
+      .then(response => response as ForumWishItem[])
       .catch(this.handleError);
   }
 

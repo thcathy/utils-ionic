@@ -2,19 +2,30 @@ import {Component, OnInit} from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import {ForumWishItem} from "../../app/entity/forum-wishlist";
 import {ForumService} from "../../app/service/forum.service";
+import {AuthService} from "../../app/service/auth.service";
 
 @Component({
   selector: 'page-forum-wish-list',
   templateUrl: 'forum-wish-list.html',
 })
-export class ForumWishListPage implements OnInit {
+export class ForumWishListPage {
   wishlists: ForumWishItem[];
   itemText: string;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public alertCtrl: AlertController,
-              private forumService: ForumService) {
+              public forumService: ForumService,
+              public authService: AuthService) {
+  }
+
+  ionViewWillEnter() {
+    if (!this.authService.requireAuthenticated())
+      return;
+
+    this.forumService.getWishList().then(
+      lists => this.wishlists = lists
+    );
   }
 
   ionViewDidLoad() {
@@ -53,12 +64,6 @@ export class ForumWishListPage implements OnInit {
       ]
     });
     alert.present();
-  }
-
-  ngOnInit() {
-    this.forumService.getWishList().then(
-      lists => this.wishlists = lists
-    );
   }
 
 }

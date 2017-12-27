@@ -7,6 +7,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {HelloIonicPage} from "../pages/hello-ionic/hello-ionic";
 import {AuthService} from "./service/auth.service";
 
+import Auth0Cordova from '@auth0/cordova';
+import {AuthCordovaService} from "./service/auth-cordova.service";
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -26,6 +29,7 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public authService: AuthService,
+    public authCordovaService: AuthCordovaService
   ) {
     this.initializeApp();
     authService.handleAuthentication();
@@ -55,7 +59,17 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      // Add this function
+      (<any>window).handleOpenURL = (url) => {
+        Auth0Cordova.onRedirectUri(url);
+      };
+
     });
+  }
+
+  isApp(): boolean {
+    return this.platform.is('ios') || this.platform.is('android');
   }
 
   openPage(page) {
@@ -72,9 +86,7 @@ export class MyApp {
       });
 
     } else {
-      this.nav.setRoot(page.url).catch(() => {
-        console.log("Didn't set nav root");
-      });
+      this.nav.setRoot(page.url);
     }
   }
 }
