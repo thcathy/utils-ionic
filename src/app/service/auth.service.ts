@@ -54,10 +54,14 @@ export class AuthService {
   }
 
   public login(): void {
-    if (this.appService.isApp())
+    if (this.appService.isApp()) {
+      console.log('login by cordova');
       this.loginCordova();
-    else
+    } else {
+      console.log('login by auth0 web page');
       this.auth0.authorize();
+    }
+
   }
 
   public handleAuthentication(): void {
