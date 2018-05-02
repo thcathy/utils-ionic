@@ -27,7 +27,7 @@ export class ForumThreadsPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public loadingCtrl: LoadingController,
-              private forumService: ForumService,
+              public forumService: ForumService,
               public appService: AppService) {
     this.threads = this.DEFAULT_THREAD;
     let loading = this.loadingCtrl.create({
@@ -52,6 +52,13 @@ export class ForumThreadsPage {
     thread.visited = true;
     window.open('http://' + thread.url, '_blank');
     this.forumService.visitedUrl(thread.url, thread.title);
+  }
+
+  addToWishList(thread: ForumThread): void {
+    console.log(`add ${thread.title} to wish list`);
+    this.forumService.addWishList(thread.title).then(i => {
+      thread.wished = true;
+    });
   }
 
   ionViewDidLoad() {
