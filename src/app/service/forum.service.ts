@@ -44,14 +44,14 @@ export class ForumService {
   }
 
   addWishList(text: string): Promise<ForumWishItem> {
-    return this.http.get(this.ADD_WISHLIST_URL + text)
+    return this.http.post<ForumWishItem>(this.ADD_WISHLIST_URL, text)
       .toPromise()
       .then(response => response as ForumWishItem)
       .catch(this.handleError);
   }
 
   deleteWishList(text: string): Promise<ForumWishItem[]> {
-    return this.http.get(this.DELETE_WISHLIST_URL + text)
+    return this.http.post<ForumWishItem[]>(this.DELETE_WISHLIST_URL, text)
       .toPromise()
       .then(response => response as ForumWishItem[])
       .catch(this.handleError);
