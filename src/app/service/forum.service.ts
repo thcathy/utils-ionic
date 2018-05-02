@@ -25,7 +25,7 @@ export class ForumService {
     return this.http.get<ForumThread[]>(this.LIST_URL + type + "/" + page);
   }
 
-  visitedUrl(url: string): Promise<string> {
+  visitedUrl(url: string, title: string): Promise<string> {
     return this.http.post(this.VISITED_URL, url,{responseType: 'text'})
       .toPromise()
       .then(response => 'success')

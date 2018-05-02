@@ -51,7 +51,7 @@ export class ForumThreadsPage {
     console.log('Selected thread: ' + thread);
     thread.visited = true;
     window.open('http://' + thread.url, '_blank');
-    this.forumService.visitedUrl(thread.url);
+    this.forumService.visitedUrl(thread.url, thread.title);
   }
 
   ionViewDidLoad() {
